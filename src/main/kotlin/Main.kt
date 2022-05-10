@@ -4,5 +4,5 @@ fun main() {
 
 
     println((z1 + z2))
-    println(z1 == z1);
+    println(z1.inv() + z1);
 }
