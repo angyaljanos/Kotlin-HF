@@ -1,15 +1,5 @@
 import kotlin.math.*
 
-data class ExpComplex(val magnitude: Double = 0.0,val exponent: Double = 0.0){
-    constructor(c:Complex) : this(c.length(),c.getTheta())
-
-    val R = magnitude
-        get(){return field;}
-
-    override fun toString():String{
-        return "$magnitude * ej$exponent"
-    }
-}
 data class PolarComplex(val radius: Double = 0.0,val theta: Double = 0.0){
     constructor(c:Complex) : this(c.length(),c.getTheta())
     override fun toString():String{
@@ -30,10 +20,6 @@ data class Complex(
     constructor(polar:PolarComplex):this(
         real = polar.R * cos(polar.fi),
         imaginary = polar.R * sin(polar.fi)
-    )
-    constructor(exp:ExpComplex):this(
-        real = exp.R * cos(exp.exponent),
-        imaginary = exp.R * sin(exp.exponent)
     )
 
     fun conjugate() = Complex(real, -imaginary)
