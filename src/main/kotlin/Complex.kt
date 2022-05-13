@@ -24,7 +24,6 @@ data class Complex(
 
     fun conjugate() = Complex(real, -imaginary)
     fun length() = sqrt(real * real + imaginary * imaginary)
-    fun inv() = Complex(-real, -imaginary)
     fun getTheta() = atan(imaginary / real) / PI * 180
 
     fun reciproc(): Complex {
@@ -37,7 +36,7 @@ data class Complex(
 
     operator fun unaryMinus() = Complex(-real, -imaginary)
 
-    override fun equals(other: Any?): Boolean {
+    override fun equals(other: Any?) :Boolean {
         if (other == null ||
             other !is Complex ||
             real != other.real || imaginary != other.imaginary) return false
@@ -45,37 +44,38 @@ data class Complex(
         return true
     }
 
-    operator fun plus(rhs: Complex): Complex{
+    operator fun plus(rhs: Complex) :Complex{
         return Complex(real + rhs.real, imaginary + rhs.imaginary)
     }
-    operator fun minus(rhs: Complex): Complex {
+    operator fun minus(rhs: Complex) :Complex {
         return Complex(real - rhs.real, imaginary - rhs.imaginary)
     }
 
-    operator fun times(rhs: Complex): Complex{
+    operator fun times(rhs: Complex) :Complex{
         val result:Complex = Complex(
             real = (real * rhs.real - imaginary * rhs.imaginary),
             imaginary =(real * rhs.imaginary + imaginary * rhs.real)
         )
         return result;
     }
-    operator fun times(rhs: Double): Complex{
+    operator fun times(rhs: Double) :Complex{
         return Complex(rhs * real, rhs * imaginary)
     }
 
-    operator fun div(rhs:Complex):Complex{
+    operator fun div(rhs:Complex) :Complex{
         val denum: Double = real*real + imaginary*imaginary
         return Complex(
             real = (real * rhs.real + imaginary * rhs.imaginary)/denum,
             imaginary = (real * rhs.imaginary + imaginary * rhs.real)/denum
         )
     }
-    operator fun div(rhs:Double):Complex{
+    operator fun div(rhs:Double) :Complex{
         return  Complex(real/rhs,imaginary/rhs)
     }
 
-    fun pow(n:Double){
+    fun pow(n:Double) :Complex{
         //TODO implement
+        return Complex();
     }
 
     override fun toString():String{
@@ -84,10 +84,14 @@ data class Complex(
 
 }
 
-operator fun Double.times(rhs: Complex):Complex{
+operator fun Double.times(rhs: Complex) :Complex{
     return Complex(this * rhs.real,this * rhs.imaginary)
 }
 
-operator fun Double.div(rhs: Complex): Complex{
+operator fun Double.div(rhs: Complex) :Complex{
     return (this * rhs.reciproc())
+}
+
+operator fun Double.plus(rhs: Complex) :Complex{
+    return Complex(this + rhs.real, rhs.imaginary)
 }
