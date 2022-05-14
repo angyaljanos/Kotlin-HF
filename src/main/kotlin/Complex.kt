@@ -1,26 +1,92 @@
+import java.util.Collections
 import kotlin.math.*
 
-data class PolarComplex(val radius: Double = 0.0,val theta: Double = 0.0){
+data class PolarComplex(private var radius: Double = 0.0,private var theta: Double = 0.0){
+    init{
+        theta %= 360
+    }
+
+    var Theta = theta
+        set(value) {field = value%360}
+
+    var R = radius
+
     constructor(c:Complex) : this(c.length(),c.getTheta())
+
     override fun toString():String{
         return "$radius * (cos($theta) + jsin($theta))"
     }
 
-    val R = radius
-        get(){return field;}
+    operator fun unaryMinus() :PolarComplex{
+        return PolarComplex(radius, -theta)
+    }
 
-    val fi = theta
-        get(){return field;}
+    operator fun times(rhs:Double): PolarComplex{
+        return PolarComplex(radius * rhs, theta)
+    }
+    operator fun times(rhs:PolarComplex): PolarComplex{
+        return PolarComplex(radius * rhs.radius , rhs.theta + theta)
+    }
+
+    operator fun div(rhs:Double): PolarComplex{
+        return PolarComplex(radius/rhs, theta)
+    }
+
+    operator fun div(rhs: PolarComplex):PolarComplex{
+        return PolarComplex(radius / rhs.radius, theta - rhs.theta)
+    }
+
+
+    fun reciproc(): PolarComplex{
+        return PolarComplex(1/radius, -theta)
+    }
+    fun conjugate():PolarComplex{
+        return PolarComplex(radius, -theta)
+    }
+    fun algebraticForm() = Complex(this)
+
+}
+
+operator fun PolarComplex.times(rhs:Complex):PolarComplex{
+    return this * rhs.polarForm()
+}
+
+operator fun PolarComplex.div(rhs: Complex):PolarComplex{
+    return this / rhs.polarForm()
+}
+
+operator fun Double.times(rhs:PolarComplex): PolarComplex{
+    return rhs * this;
+}
+
+operator fun Double.plus(rhs:PolarComplex): PolarComplex{
+    rhs.R = rhs.R + this
+    return rhs;
+}
+operator fun Int.times(rhs: PolarComplex): PolarComplex{
+    return PolarComplex(this * rhs.R, rhs.Theta)
+}
+operator fun Int.plus(rhs: PolarComplex):PolarComplex{
+    rhs.R = rhs.R + this
+    return rhs;
 }
 
 data class Complex(
-    val real:Double = 0.0,
-    val imaginary:Double = 0.0,
+    private var real:Double = 0.0,
+    private var imaginary:Double = 0.0,
 ){
     constructor(polar:PolarComplex):this(
-        real = polar.R * cos(polar.fi),
-        imaginary = polar.R * sin(polar.fi)
+        real = polar.R * cos(polar.Theta),
+        imaginary = polar.R * sin(polar.Theta)
     )
+
+    var Re = real
+    get(){return field;}
+    set(value){field = value}
+
+    var Im = imaginary
+        get(){return field;}
+        set(value){field = value}
 
     fun conjugate() = Complex(real, -imaginary)
     fun length() = sqrt(real * real + imaginary * imaginary)
@@ -78,14 +144,23 @@ data class Complex(
         return Complex();
     }
 
+    fun polarForm() = PolarComplex(this)
+
     override fun toString():String{
-        return "$real + j$imaginary"
+        val sign = if(imaginary >= 0){
+            "+"
+        }
+        else{
+            "-"
+        }
+
+        return "$real $sign j$imaginary"
     }
 
 }
 
 operator fun Double.times(rhs: Complex) :Complex{
-    return Complex(this * rhs.real,this * rhs.imaginary)
+    return Complex(this * rhs.Re,this * rhs.Im)
 }
 
 operator fun Double.div(rhs: Complex) :Complex{
@@ -93,5 +168,13 @@ operator fun Double.div(rhs: Complex) :Complex{
 }
 
 operator fun Double.plus(rhs: Complex) :Complex{
-    return Complex(this + rhs.real, rhs.imaginary)
+    return Complex(this + rhs.Re, rhs.Im)
+}
+
+operator fun Complex.times(rhs: PolarComplex): Complex{
+    return this * rhs.algebraticForm()
+}
+
+operator fun Complex.div(rhs: PolarComplex): Complex{
+    return this / rhs.algebraticForm()
 }
