@@ -118,16 +118,18 @@ data class Complex(
     operator fun plus(rhs: Complex) :Complex{
         return Complex(real + rhs.real, imaginary + rhs.imaginary)
     }
+    operator fun plus(rhs: Double) :Complex{
+        return Complex(real + rhs, imaginary)
+    }
     operator fun minus(rhs: Complex) :Complex {
         return Complex(real - rhs.real, imaginary - rhs.imaginary)
     }
 
-    operator fun times(rhs: Complex) :Complex{
-        val result:Complex = Complex(
+    operator fun times(rhs: Complex): Complex {
+        return Complex(
             real = (real * rhs.real - imaginary * rhs.imaginary),
-            imaginary =(real * rhs.imaginary + imaginary * rhs.real)
+            imaginary = (real * rhs.imaginary + imaginary * rhs.real)
         )
-        return result;
     }
     operator fun times(rhs: Double) :Complex{
         return Complex(rhs * real, rhs * imaginary)
