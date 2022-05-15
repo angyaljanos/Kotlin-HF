@@ -16,6 +16,14 @@ data class PolarComplex(private var radius: Double = 0.0,private var theta: Doub
         return "$radius * (cos($theta) + jsin($theta))"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other == null ||
+            other !is PolarComplex ||
+            radius != other.R || theta != other.Theta) return false
+
+        return true
+    }
+
     operator fun unaryMinus() :PolarComplex{
         return PolarComplex(radius, -theta)
     }
