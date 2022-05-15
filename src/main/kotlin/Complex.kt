@@ -1,4 +1,3 @@
-import java.util.Collections
 import kotlin.math.*
 
 data class PolarComplex(private var radius: Double = 0.0,private var theta: Double = 0.0){
@@ -42,6 +41,12 @@ data class PolarComplex(private var radius: Double = 0.0,private var theta: Doub
     }
     fun conjugate():PolarComplex{
         return PolarComplex(radius, -theta)
+    }
+    fun pow(n: Double):PolarComplex{
+        return PolarComplex(
+            radius = Math.pow(radius, n),
+            theta = (theta * n)
+        )
     }
     fun algebraticForm() = Complex(this)
 
@@ -139,11 +144,6 @@ data class Complex(
         return  Complex(real/rhs,imaginary/rhs)
     }
 
-    fun pow(n:Double) :Complex{
-        //TODO implement
-        return Complex();
-    }
-
     fun polarForm() = PolarComplex(this)
 
     override fun toString():String{
@@ -156,18 +156,28 @@ data class Complex(
 
         return "$real $sign j$imaginary"
     }
-
 }
 
 operator fun Double.times(rhs: Complex) :Complex{
     return Complex(this * rhs.Re,this * rhs.Im)
 }
 
+operator fun Int.times(rhs: Complex) :Complex{
+    return Complex(this * rhs.Re,this * rhs.Im)
+}
+
 operator fun Double.div(rhs: Complex) :Complex{
+    return (this * rhs.reciproc())
+}
+operator fun Int.div(rhs: Complex) :Complex{
     return (this * rhs.reciproc())
 }
 
 operator fun Double.plus(rhs: Complex) :Complex{
+    return Complex(this + rhs.Re, rhs.Im)
+}
+
+operator fun Int.plus(rhs: Complex) :Complex{
     return Complex(this + rhs.Re, rhs.Im)
 }
 
